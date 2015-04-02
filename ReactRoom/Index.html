@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>React Room</title>
+
+    <link href="Styles/Resetcss.css" rel="stylesheet" />
+    <link href="Styles/StyleSheet1.css" rel="stylesheet" />
+
+    <script src="Scripts/react/react-0.12.2.min.js"></script>
+    <script src="Scripts/react/JSXTransformer-0.12.2.js"></script>
+
+    <script type="text/jsx">
+        
+        var Television = React.createClass({
+            getInitialState: function(){
+                return { power:"OFF", volume : "3" };
+            },
+            handleClick: function(){
+                var newState = this.state.power == "ON" ? "OFF" : "ON";
+                this.setState({
+                    power: newState,
+                });
+            },
+            render: function(){
+                return (
+                    <div className="tv">
+                        <span onClick={ this.handleClick }>Television</span>
+                        <p>power: { this.state.power }</p>
+                        <p>volume: {this.state.volume}</p>
+                    </div>
+                );
+            }
+        });
+
+       var Chair = React.createClass({
+            render: function(){
+                return <li className="chair">Chair for: {this.props.name}</li>;
+            }
+        });
+
+        var Table = React.createClass({
+
+            getInitialState: function(){
+                return {people: this.props.people};
+            },
+
+            addPerson : function(){
+
+                var p = this.state.people;
+
+                p.push({name:"new"});
+
+                this.setState({people:p});
+            },
+
+            render: function(){
+
+        
+                var chairs = this.state.people.map(function(p){
+                    return (<Chair name={p.name}></Chair>);
+                });
+
+                return (
+                    <div className="table">
+                        <p onClick={ this.addPerson }>Table</p>
+                        <ul>
+                            {chairs}
+                        </ul>
+                    </div>
+                );
+            }
+        });
+
+        var Room = React.createClass({
+
+            render: function(){
+
+                return (
+                    <div className="room">
+                        This is the room
+                       <Television />
+                       <Television />
+                       <Table people={this.props.people} />
+                    </div>
+                );
+            }
+        });
+
+
+        var people = [];
+
+        var mountNode = document.getElementById("mountNode");
+        React.render(<Room people={people} />, mountNode);
+
+    </script>
+
+</head>
+<body>
+    <div id="mountNode"></div>
+</body>
+</html>
